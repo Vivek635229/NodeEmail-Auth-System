@@ -75,7 +75,7 @@ Nodemailer/
 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Vivek635229/NodeEmail-Auth-System.git
 cd Nodemailer
 ```
 
@@ -88,11 +88,11 @@ npm install
 3. Create `.env` file in project root
 
 ```env
-PORT=8000
+PORT=1000
 SSECRECT=your_session_secret
 USEREMAIL=your_email@gmail.com
 USERPASS=your_email_app_password
-APP_BASE_URL=http://127.0.0.1:8000
+APP_BASE_URL=http://127.0.0.1:1000
 ```
 
 4. Start MongoDB locally
@@ -119,10 +119,73 @@ npm start
 
 ## Default URLs
 
-- User login: `http://127.0.0.1:8000/`
-- User register: `http://127.0.0.1:8000/register`
-- Admin login: `http://127.0.0.1:8000/admin`
-- Admin dashboard: `http://127.0.0.1:8000/admin/dashboard`
+- User login: `http://127.0.0.1:1000/`
+- User register: `http://127.0.0.1:1000/register`
+- Admin login: `http://127.0.0.1:1000/admin`
+- Admin dashboard: `http://127.0.0.1:1000/admin/dashboard`
+
+## Screenshots
+
+### Login Page
+
+![Login Page](docs/screenshots/01-login-page.png)
+
+### Registration Page
+
+![Registration Page](docs/screenshots/02-registration-page.png)
+
+### User Dashboard
+
+![User Dashboard](docs/screenshots/03-user-dashboard.png)
+
+### User Edit Profile
+
+![User Edit Profile](docs/screenshots/04-user-edit-profile.png)
+
+### Admin Login
+
+![Admin Login](docs/screenshots/05-admin-login.png)
+
+### Admin Dashboard
+
+![Admin Dashboard](docs/screenshots/06-admin-dashboard.png)
+
+### Edit User From Admin
+
+![Edit User From Admin](docs/screenshots/07-edit-user-from-admin.png)
+
+### Forgot Password
+
+![Forgot Password](docs/screenshots/08-forgot-password.png)
+
+### Email Verification Page
+
+![Email Verification](docs/screenshots/09-email-verification.png)
+
+### Email Verified Message
+
+![Email Verified Message](docs/screenshots/10-email-verified-message.png)
+
+### Verification Email Link (Inbox)
+
+![Verification Link](docs/screenshots/11-verification-link-email.png)
+
+## Project Reports
+
+- PDF Report: [users.pdf](docs/report/users.pdf)
+- Excel Report: [users.xlsx](docs/report/users.xlsx)
+
+## Documentation Path Convention
+
+For future uploads, keep files in these folders:
+
+- Screenshots folder: `docs/screenshots/`
+- Report folder: `docs/report/`
+
+Recommended naming:
+
+- Screenshots: `NN-page-name.png` (example: `01-login-page.png`)
+- Report: `Project-Report.pdf`
 
 ## Important Notes
 
