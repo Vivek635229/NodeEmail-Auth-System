@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{pageTitle}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      // Tailwind dark mode configuration
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#effcf6",
+                100: "#d1fae5",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857"
+              }
+            }
+          }
+        }
+      };
+    </script>
+
+    <script>
+      // Queue toast calls until footer loads the final renderer.
+      window.__toastQueue = window.__toastQueue || [];
+      if (typeof window.showToast !== "function") {
+        window.showToast = function (message, type) {
+          window.__toastQueue.push({ message: message, type: type || "success" });
+        };
+      }
+    </script>
+
+    <style>
+      :root {
+        --brand-1: #0f766e;
+        --brand-2: #22c55e;
+        --brand-3: #f59e0b;
+        --ink: #0f172a;
+        --muted: #475569;
+      }
+
+      * {
+        font-family: "Outfit", sans-serif;
+      }
+
+      h1,
+      h2,
+      h3,
+      .display-font {
+        font-family: "Sora", sans-serif;
+      }
+
+      @keyframes riseIn {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.985);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes drift {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        50% {
+          transform: translate3d(20px, -18px, 0);
+        }
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      .page-bg {
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.16) 0%, transparent 28%),
+          radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.2) 0%, transparent 32%),
+          radial-gradient(circle at 75% 80%, rgba(14, 116, 144, 0.16) 0%, transparent 32%),
+          linear-gradient(120deg, #f8fafc 0%, #eef2ff 45%, #ecfeff 100%);
+      }
+
+      .dark .page-bg {
+        color: #e5e7eb;
+        background:
+          radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.26) 0%, transparent 30%),
+          radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.25) 0%, transparent 34%),
+          radial-gradient(circle at 75% 80%, rgba(20, 184, 166, 0.2) 0%, transparent 34%),
+          linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+      }
+
+      .ambient {
+        pointer-events: none;
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .ambient-orb {
+        position: absolute;
+        border-radius: 999px;
+        filter: blur(10px);
+        opacity: 0.55;
+        animation: drift 11s ease-in-out infinite;
+      }
+
+      .orb-one {
+        width: 280px;
+        height: 280px;
+        top: -80px;
+        left: -90px;
+        background: radial-gradient(circle, rgba(34, 197, 94, 0.4), transparent 70%);
+      }
+
+      .orb-two {
+        width: 340px;
+        height: 340px;
+        right: -120px;
+        top: 20%;
+        animation-delay: 1.2s;
+        background: radial-gradient(circle, rgba(245, 158, 11, 0.35), transparent 70%);
+      }
+
+      .orb-three {
+        width: 300px;
+        height: 300px;
+        left: 25%;
+        bottom: -150px;
+        animation-delay: 0.4s;
+        background: radial-gradient(circle, rgba(20, 184, 166, 0.32), transparent 70%);
+      }
+
+      .card {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 28rem;
+        border-radius: 1.25rem;
+        border: 1px solid rgba(148, 163, 184, 0.32);
+        background: rgba(255, 255, 255, 0.78);
+        padding: 1.6rem;
+        box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        animation: riseIn 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .dark .card {
+        border-color: rgba(148, 163, 184, 0.24);
+        background: rgba(15, 23, 42, 0.72);
+        box-shadow: 0 28px 44px rgba(2, 6, 23, 0.55), inset 0 1px 0 rgba(148, 163, 184, 0.1);
+      }
+
+      .card-lg {
+        max-width: 48rem;
+      }
+
+      .card-xl {
+        max-width: 72rem;
+      }
+
+      .input-base {
+        display: block;
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.9);
+        color: #0f172a;
+        font-size: 0.875rem;
+        padding: 0.72rem 0.85rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+      }
+
+      .input-base::placeholder {
+        color: #94a3b8;
+      }
+
+      .input-base:focus {
+        outline: none;
+        border-color: #0f766e;
+        box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.18);
+      }
+
+      .dark .input-base {
+        border-color: #334155;
+        background: rgba(15, 23, 42, 0.66);
+        color: #e2e8f0;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 0.8rem;
+        padding: 0.72rem 1rem;
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        color: #ffffff;
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        box-shadow: 0 12px 24px rgba(15, 118, 110, 0.28);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      }
+
+      .btn-primary:hover {
+        filter: brightness(1.06);
+        transform: translateY(-2px);
+        box-shadow: 0 16px 28px rgba(15, 118, 110, 0.32);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .nav-shell {
+        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        background: rgba(255, 255, 255, 0.68);
+        backdrop-filter: blur(10px);
+      }
+
+      .dark .nav-shell {
+        border-color: rgba(71, 85, 105, 0.4);
+        background: rgba(2, 6, 23, 0.55);
+      }
+
+      .brand-pill {
+        background: linear-gradient(140deg, #0f766e, #22c55e);
+        box-shadow: 0 10px 22px rgba(15, 118, 110, 0.3);
+      }
+
+      .panel-glow {
+        position: relative;
+      }
+
+      .panel-glow::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: 1.3rem;
+        background: linear-gradient(130deg, rgba(16, 185, 129, 0.42), rgba(245, 158, 11, 0.25));
+        z-index: -1;
+        opacity: 0.38;
+        filter: blur(14px);
+      }
+    </style>
+  </head>
+
+  <body class="page-bg flex min-h-screen flex-col">
+    <div class="ambient">
+      <span class="ambient-orb orb-one"></span>
+      <span class="ambient-orb orb-two"></span>
+      <span class="ambient-orb orb-three"></span>
+    </div>
+
+    <header class="nav-shell relative z-10">
+      <nav
+        class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8"
+      >
+        <a href="/" class="flex items-center gap-3">
+          <span
+            class="brand-pill flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold text-white"
+          >
+           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+ <path d="M21.5 18L14.8571 12M9.14286 12L2.50003 18M2 7L10.1649 12.7154C10.8261 13.1783 11.1567 13.4097 11.5163 13.4993C11.8339 13.5785 12.1661 13.5785 12.4837 13.4993C12.8433 13.4097 13.1739 13.1783 13.8351 12.7154L22 7M6.8 20H17.2C18.8802 20 19.7202 20 20.362 19.673C20.9265 19.3854 21.3854 18.9265 21.673 18.362C22 17.7202 22 16.8802 22 15.2V8.8C22 7.11984 22 6.27976 21.673 5.63803C21.3854 5.07354 20.9265 4.6146 20.362 4.32698C19.7202 4 18.8802 4 17.2 4H6.8C5.11984 4 4.27976 4 3.63803 4.32698C3.07354 4.6146 2.6146 5.07354 2.32698 5.63803C2 6.27976 2 7.11984 2 8.8V15.2C2 16.8802 2 17.7202 2.32698 18.362C2.6146 18.9265 3.07354 19.3854 3.63803 19.673C4.27976 20 5.11984 20 6.8 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+ </svg>
+          </span>
+          <span class="display-font text-sm font-semibold tracking-tight sm:text-lg">
+            NodeAuth Mailer
+          </span>
+        </a>
+
+        <div class="flex items-center gap-3">
+          <a
+            href="/login"
+            class="hidden text-xs font-semibold text-slate-600 transition hover:text-emerald-700 dark:text-slate-300 dark:hover:text-emerald-300 sm:inline-block"
+            >Login</a
+          >
+          <a
+            href="/Register"
+            class="hidden rounded-full border border-emerald-200 bg-emerald-50/70 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-white dark:border-emerald-500/30 dark:bg-emerald-950/30 dark:text-emerald-300 dark:hover:border-emerald-300 dark:hover:bg-emerald-950 sm:inline-block"
+            >Register</a
+          >
+
+          <button
+            id="theme-toggle"
+            type="button"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white/70 text-slate-500 shadow-sm transition hover:border-emerald-300 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:border-emerald-500/60 dark:hover:text-emerald-300"
+            aria-label="Toggle dark mode"
+          >
+            <span id="theme-toggle-light" class="hidden" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3V5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M12 18.5V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M5.64 5.64L7.41 7.41" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M16.59 16.59L18.36 18.36" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M3 12H5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M18.5 12H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M5.64 18.36L7.41 16.59" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M16.59 7.41L18.36 5.64" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="4" fill="currentColor"/>
+              </svg>
+            </span>
+            <span id="theme-toggle-dark" class="hidden" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 14.5C19.25 14.83 18.42 15 17.58 15C14.08 15 11.25 12.17 11.25 8.67C11.25 7.26 11.71 5.95 12.5 4.89C8.79 5.53 6 8.76 6 12.67C6 17.05 9.62 20.67 14 20.67C17.92 20.67 21.15 17.88 21.79 14.17C21.22 14.33 20.61 14.44 20 14.5Z" fill="currentColor"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="relative z-10 flex flex-1 items-center justify-center px-4 py-10 sm:px-6">

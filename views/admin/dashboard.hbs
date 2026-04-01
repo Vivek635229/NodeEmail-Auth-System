@@ -1,0 +1,161 @@
+{{>header}}
+
+<section class="mx-auto w-full max-w-6xl">
+  <div class="card card-xl panel-glow">
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="display-font text-2xl font-semibold">Admin Dashboard</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400">Manage all registered users from one place.</p>
+      </div>
+      <a href="/admin/home" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:bg-slate-900">Admin Home</a>
+    </div>
+
+    <div class="mb-5 grid gap-3 sm:grid-cols-3">
+      <div class="rounded-xl border border-emerald-200 bg-emerald-50/80 p-4 dark:border-emerald-500/30 dark:bg-emerald-950/30">
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300">Total Pages</p>
+        <p class="mt-1 text-2xl font-semibold text-emerald-800 dark:text-emerald-200">{{totalpage}}</p>
+      </div>
+      <div class="rounded-xl border border-amber-200 bg-amber-50/80 p-4 dark:border-amber-500/30 dark:bg-amber-950/30">
+        <p class="text-xs font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-300">Current Page</p>
+        <p class="mt-1 text-2xl font-semibold text-amber-800 dark:text-amber-200">{{currentPage}}</p>
+      </div>
+      <div class="rounded-xl border border-sky-200 bg-sky-50/80 p-4 dark:border-sky-500/30 dark:bg-sky-950/30">
+        <p class="text-xs font-semibold uppercase tracking-wide text-sky-700 dark:text-sky-300">Total Users</p>
+        <p class="mt-1 text-2xl font-semibold text-sky-800 dark:text-sky-200">{{totalUsers}}</p>
+      </div>
+    </div>
+
+    <form action="" method="get" class="mb-4 grid gap-3 md:grid-cols-12">
+      <a href="/admin/new-user" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-700/20 transition hover:-translate-y-0.5 md:col-span-2">Add User</a>
+      <a href="/admin/export-user" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:bg-slate-900 md:col-span-2">Export Excel</a>
+      <a id="export-pdf-btn" href="/admin/export-user-pdf" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:bg-slate-900 md:col-span-2">Export PDF</a>
+      <input type="text" name="search" value="{{search}}" class="input-base md:col-span-4" placeholder="Search name, email, mobile" />
+      <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 md:col-span-1">Search</button>
+      <a href="/admin/dashboard" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:bg-slate-900 md:col-span-1">Reset</a>
+    </form>
+
+    <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white/70 dark:border-slate-700 dark:bg-slate-900/50">
+      <table class="min-w-full text-left text-sm">
+        <thead class="bg-slate-100/90 text-xs uppercase text-slate-600 dark:bg-slate-800/90 dark:text-slate-300">
+          <tr>
+            <th class="px-4 py-3">Profile</th>
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3">Email</th>
+            <th class="px-4 py-3">Mobile</th>
+            <th class="px-4 py-3">Verified</th>
+            <th class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white/60 dark:divide-slate-700 dark:bg-slate-900/30">
+          {{#if users.length}}
+          {{#each users}}
+          <tr class="transition hover:bg-emerald-50/70 dark:hover:bg-slate-800/70">
+            <td class="px-4 py-3">
+              <img src="https://api.dicebear.com/8.x/initials/svg?seed={{name}}" alt="{{name}}" class="h-10 w-10 rounded-full border border-slate-200 bg-white p-1" />
+            </td>
+            <td class="px-4 py-3 font-medium">{{name}}</td>
+            <td class="px-4 py-3">{{email}}</td>
+            <td class="px-4 py-3">{{mobile}}</td>
+            <td class="px-4 py-3">
+              {{#ifeq is_varified 1}}
+              <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">Verified</span>
+              {{else}}
+              <span class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700 dark:bg-red-900/40 dark:text-red-300">Not Verified</span>
+              {{/ifeq}}
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex flex-wrap gap-2">
+                {{#ifeq is_varified 1}}
+                <a href="/admin/verify-user?id={{_id}}&set=0" class="rounded-lg bg-slate-700 px-3 py-1 text-xs font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800">Unverify</a>
+                {{else}}
+                <a href="/admin/verify-user?id={{_id}}&set=1" class="rounded-lg bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-700">Verify</a>
+                {{/ifeq}}
+                <a href="/admin/edit-user?id={{_id}}" class="rounded-lg bg-amber-400 px-3 py-1 text-xs font-semibold text-slate-900 shadow-sm transition hover:-translate-y-0.5 hover:bg-amber-300">Edit</a>
+                <a href="/admin/delete-user?id={{_id}}" class="rounded-lg bg-red-500 px-3 py-1 text-xs font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red-600">Delete</a>
+              </div>
+            </td>
+          </tr>
+          {{/each}}
+          {{else}}
+          <tr>
+            <td colspan="6" class="px-4 py-8 text-center text-sm text-slate-500">No users found.</td>
+          </tr>
+          {{/if}}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="pagination" data-total="{{totalpage}}" data-current="{{currentPage}}" class="mt-4 flex flex-wrap gap-2"></div>
+  </div>
+</section>
+
+{{#if statusMessage}}
+<script>
+  showToast("{{statusMessage}}", "{{statusType}}");
+</script>
+{{/if}}
+
+<script>
+  (function () {
+    const exportPdfBtn = document.getElementById("export-pdf-btn");
+    if (exportPdfBtn) {
+      exportPdfBtn.addEventListener("click", function () {
+        setTimeout(function () {
+          showToast("PDF generated successfully. Download started.", "success");
+        }, 250);
+      });
+    }
+
+    const wrap = document.getElementById("pagination");
+    if (!wrap) return;
+    const total = Number(wrap.dataset.total || 0);
+    const current = Number(wrap.dataset.current || 1);
+    if (total <= 1) return;
+
+    const params = new URLSearchParams(window.location.search);
+
+    const prev = document.createElement("a");
+    params.set("page", String(Math.max(1, current - 1)));
+    prev.href = "?" + params.toString();
+    prev.textContent = "Prev";
+    prev.className = "inline-flex h-9 items-center justify-center rounded-md border border-slate-300 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800";
+    wrap.appendChild(prev);
+
+    for (let i = 1; i <= total; i++) {
+      params.set("page", String(i));
+      const a = document.createElement("a");
+      a.href = "?" + params.toString();
+      a.textContent = String(i);
+      a.className =
+        "inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm font-semibold " +
+        (i === current
+          ? "bg-primary-600 text-white"
+          : "border border-slate-300 text-slate-700 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800");
+      wrap.appendChild(a);
+    }
+
+    const next = document.createElement("a");
+    params.set("page", String(Math.min(total, current + 1)));
+    next.href = "?" + params.toString();
+    next.textContent = "Next";
+    next.className = "inline-flex h-9 items-center justify-center rounded-md border border-slate-300 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800";
+    wrap.appendChild(next);
+  })();
+</script>
+
+<script>
+  (function () {
+    const rows = document.querySelectorAll("tbody tr");
+    rows.forEach(function (row, index) {
+      row.style.opacity = "0";
+      row.style.transform = "translateY(8px)";
+      setTimeout(function () {
+        row.style.transition = "all 320ms ease";
+        row.style.opacity = "1";
+        row.style.transform = "translateY(0)";
+      }, index * 70);
+    });
+  })();
+</script>
+
+{{>footer}}

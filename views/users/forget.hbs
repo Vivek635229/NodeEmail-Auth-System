@@ -1,0 +1,56 @@
+
+{{>header}}
+
+<section class="mx-auto w-full max-w-md">
+  <div class="card">
+    <h1 class="mb-1 text-center text-xl font-semibold">Forgot password</h1>
+    <p class="mb-6 text-center text-sm text-slate-500 dark:text-slate-400">
+      Enter your account email, we will send a reset link.
+    </p>
+
+    <form id="forget-form" action="/forget" method="post" class="space-y-4">
+      <div class="space-y-1.5">
+        <label for="forget-email" class="text-xs font-medium text-slate-600 dark:text-slate-300">Email</label>
+        <input
+          id="forget-email"
+          type="email"
+          name="email"
+          required
+          class="input-base"
+          placeholder="you@example.com"
+        />
+      </div>
+
+      <button id="forget-submit" class="btn-primary" type="submit">
+        <span id="forget-submit-text">Send Reset Link</span>
+        <span id="forget-loading" class="ml-2 hidden h-4 w-4 animate-spin rounded-full border-2 border-white/70 border-t-transparent"></span>
+      </button>
+    </form>
+
+    <p class="mt-4 text-center text-xs text-slate-500 dark:text-slate-400">
+      Remember password?
+      <a href="/login" class="font-semibold text-primary-600 dark:text-primary-300">Back to login</a>
+    </p>
+
+    {{#if message}}
+    <script>showToast("{{message}}", "{{messageType}}");</script>
+    {{/if}}
+  </div>
+</section>
+
+<script>
+  (function () {
+    const form = document.getElementById("forget-form");
+    const submitBtn = document.getElementById("forget-submit");
+    const loading = document.getElementById("forget-loading");
+    const submitText = document.getElementById("forget-submit-text");
+    if (!form) return;
+    form.addEventListener("submit", function () {
+      submitBtn.disabled = true;
+      loading.classList.remove("hidden");
+      submitText.textContent = "Sending...";
+    });
+  })();
+</script>
+
+{{>footer}}

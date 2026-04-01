@@ -1,0 +1,179 @@
+    </main>
+
+    <!-- Toast notifications -->
+    <div
+      id="toast"
+      class="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4"
+    >
+      <div
+        id="toast-inner"
+        class="hidden min-w-[260px] max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white/95 px-4 py-3 text-sm shadow-2xl shadow-slate-900/20 backdrop-blur"
+      >
+        <div class="flex items-start gap-3">
+          <span id="toast-icon" class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold"></span>
+          <div class="flex-1">
+            <p id="toast-message" class="font-medium text-slate-800"></p>
+          </div>
+        </div>
+        <div id="toast-bar" class="mt-3 h-1 w-full origin-left rounded-full bg-emerald-500"></div>
+      </div>
+    </div>
+
+    <!-- Shared JS: dark mode, toasts, password helpers -->
+    <script>
+      // Dark mode toggle with localStorage
+      (function () {
+        const root = document.documentElement;
+        const toggle = document.getElementById("theme-toggle");
+        const lightIcon = document.getElementById("theme-toggle-light");
+        const darkIcon = document.getElementById("theme-toggle-dark");
+
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          root.classList.add("dark");
+          if (lightIcon && darkIcon) {
+            lightIcon.classList.remove("hidden");
+          }
+        } else {
+          root.classList.remove("dark");
+          if (lightIcon && darkIcon) {
+            darkIcon.classList.remove("hidden");
+          }
+        }
+
+        if (toggle) {
+          toggle.addEventListener("click", function () {
+            const isDark = root.classList.toggle("dark");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            if (lightIcon && darkIcon) {
+              lightIcon.classList.toggle("hidden", !isDark);
+              darkIcon.classList.toggle("hidden", isDark);
+            }
+          });
+        }
+      })();
+
+      // Toast helper
+      function renderToast(message, type) {
+        const wrapper = document.getElementById("toast-inner");
+        const msgEl = document.getElementById("toast-message");
+        const iconEl = document.getElementById("toast-icon");
+        const barEl = document.getElementById("toast-bar");
+        if (!wrapper || !msgEl || !iconEl || !barEl) return;
+
+        msgEl.textContent = message;
+        const isError = type === "error";
+
+        wrapper.className =
+          "min-w-[260px] max-w-md overflow-hidden rounded-2xl border bg-white/95 px-4 py-3 text-sm shadow-2xl shadow-slate-900/20 backdrop-blur transition-all duration-300 " +
+          (isError
+            ? "border-red-200 text-red-800 dark:border-red-700 dark:bg-slate-900/95 dark:text-red-200"
+            : "border-emerald-200 text-emerald-800 dark:border-emerald-700 dark:bg-slate-900/95 dark:text-emerald-200");
+
+        iconEl.className =
+          "mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold " +
+          (isError
+            ? "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-200"
+            : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200");
+
+        iconEl.textContent = isError ? "!" : "OK";
+        barEl.className = "mt-3 h-1 w-full origin-left rounded-full " + (isError ? "bg-red-500" : "bg-emerald-500");
+        barEl.style.animation = "none";
+
+        wrapper.classList.remove("hidden");
+        wrapper.animate(
+          [
+            { opacity: 0, transform: "translateY(-14px) scale(0.97)" },
+            { opacity: 1, transform: "translateY(0) scale(1)" }
+          ],
+          { duration: 240, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+        );
+
+        requestAnimationFrame(function () {
+          barEl.style.animation = "toastProgress 3s linear forwards";
+        });
+
+        setTimeout(function () {
+          wrapper.animate(
+            [
+              { opacity: 1, transform: "translateY(0) scale(1)" },
+              { opacity: 0, transform: "translateY(-10px) scale(0.98)" }
+            ],
+            { duration: 200, easing: "ease-in" }
+          );
+          setTimeout(function () {
+            wrapper.classList.add("hidden");
+          }, 180);
+        }, 3000);
+      }
+
+      const toastAnimStyle = document.createElement("style");
+      toastAnimStyle.textContent = "@keyframes toastProgress { from { transform: scaleX(1); } to { transform: scaleX(0); } }";
+      document.head.appendChild(toastAnimStyle);
+
+      window.showToast = renderToast;
+      if (Array.isArray(window.__toastQueue) && window.__toastQueue.length) {
+        const pendingToasts = window.__toastQueue.slice();
+        window.__toastQueue = [];
+        pendingToasts.forEach(function (item, index) {
+          setTimeout(function () {
+            renderToast(item.message, item.type);
+          }, index * 150);
+        });
+      }
+
+      // Password strength indicator
+      function bindPasswordStrength(inputId, barId, labelId) {
+        const input = document.getElementById(inputId);
+        const bar = document.getElementById(barId);
+        const label = document.getElementById(labelId);
+        if (!input || !bar || !label) return;
+
+        input.addEventListener("input", function () {
+          const value = input.value || "";
+          let score = 0;
+          if (value.length >= 8) score++;
+          if (/[A-Z]/.test(value)) score++;
+          if (/[0-9]/.test(value)) score++;
+          if (/[^A-Za-z0-9]/.test(value)) score++;
+
+          const percent = (score / 4) * 100;
+          bar.style.width = percent + "%";
+
+          if (!value) {
+            bar.className = "h-1.5 w-0 rounded-full bg-slate-200";
+            label.textContent = "";
+            return;
+          }
+
+          if (score <= 1) {
+            bar.className = "h-1.5 rounded-full bg-red-500";
+            label.textContent = "Weak";
+          } else if (score === 2) {
+            bar.className = "h-1.5 rounded-full bg-amber-500";
+            label.textContent = "Fair";
+          } else if (score === 3) {
+            bar.className = "h-1.5 rounded-full bg-emerald-500";
+            label.textContent = "Good";
+          } else {
+            bar.className = "h-1.5 rounded-full bg-emerald-600";
+            label.textContent = "Strong";
+          }
+        });
+      }
+
+      // Show/hide password
+      function bindPasswordToggle(inputId, buttonId) {
+        const input = document.getElementById(inputId);
+        const btn = document.getElementById(buttonId);
+        if (!input || !btn) return;
+
+        btn.addEventListener("click", function () {
+          const isPassword = input.type === "password";
+          input.type = isPassword ? "text" : "password";
+          btn.textContent = isPassword ? "Hide" : "Show";
+        });
+      }
+    </script>
+  </body>
+</html>

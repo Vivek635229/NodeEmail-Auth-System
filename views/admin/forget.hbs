@@ -1,0 +1,40 @@
+
+{{>header}}
+
+<section class="mx-auto w-full max-w-md">
+  <div class="card">
+    <h1 class="mb-1 text-center text-xl font-semibold">Admin Forgot Password</h1>
+    <p class="mb-6 text-center text-sm text-slate-500 dark:text-slate-400">
+      Enter admin email to receive reset link.
+    </p>
+    <form id="admin-forget-form" action="" method="post" class="space-y-4">
+      <div class="space-y-1.5">
+        <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Email</label>
+        <input class="input-base" type="email" name="email" required placeholder="admin@example.com" />
+      </div>
+      <button id="admin-forget-btn" class="btn-primary" type="submit">
+        <span id="admin-forget-text">Send Reset Link</span>
+        <span id="admin-forget-loading" class="ml-2 hidden h-4 w-4 animate-spin rounded-full border-2 border-white/70 border-t-transparent"></span>
+      </button>
+    </form>
+    {{#if message}}
+    <script>showToast("{{message}}", "{{messageType}}");</script>
+    {{/if}}
+  </div>
+</section>
+
+<script>
+  (function () {
+    const form = document.getElementById("admin-forget-form");
+    const btn = document.getElementById("admin-forget-btn");
+    const loading = document.getElementById("admin-forget-loading");
+    const text = document.getElementById("admin-forget-text");
+    form.addEventListener("submit", function () {
+      btn.disabled = true;
+      loading.classList.remove("hidden");
+      text.textContent = "Sending...";
+    });
+  })();
+</script>
+
+{{>footer}}

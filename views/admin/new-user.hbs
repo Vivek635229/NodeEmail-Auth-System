@@ -1,0 +1,53 @@
+
+{{>header}}
+
+<section class="mx-auto w-full max-w-md">
+  <div class="card">
+    <h1 class="mb-1 text-center text-xl font-semibold">Add New User</h1>
+    <p class="mb-6 text-center text-sm text-slate-500 dark:text-slate-400">
+      Create user account and send credentials by email.
+    </p>
+
+    <form id="admin-new-user-form" action="" method="post" class="space-y-4">
+      <div class="space-y-1.5">
+        <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Name</label>
+        <input class="input-base" type="text" name="name" required />
+      </div>
+      <div class="space-y-1.5">
+        <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Email</label>
+        <input class="input-base" type="email" name="email" required />
+      </div>
+      <div class="space-y-1.5">
+        <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Mobile</label>
+        <input class="input-base" type="text" name="mobile" required />
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <button id="admin-new-user-btn" class="btn-primary" type="submit">
+          <span id="admin-new-user-text">Add User</span>
+          <span id="admin-new-user-loading" class="ml-2 hidden h-4 w-4 animate-spin rounded-full border-2 border-white/70 border-t-transparent"></span>
+        </button>
+        <a href="/admin/dashboard" class="inline-flex items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Go Back</a>
+      </div>
+    </form>
+    {{#if message}}
+    <script>showToast("{{message}}", "{{messageType}}");</script>
+    {{/if}}
+  </div>
+</section>
+
+<script>
+  (function () {
+    const form = document.getElementById("admin-new-user-form");
+    const btn = document.getElementById("admin-new-user-btn");
+    const loading = document.getElementById("admin-new-user-loading");
+    const text = document.getElementById("admin-new-user-text");
+    form.addEventListener("submit", function () {
+      btn.disabled = true;
+      loading.classList.remove("hidden");
+      text.textContent = "Adding...";
+    });
+  })();
+</script>
+
+{{>footer}}

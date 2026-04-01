@@ -1,0 +1,210 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users Report</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        color: #0f172a;
+        margin: 0;
+        padding: 0;
+        background: #f8fafc;
+      }
+
+      .wrap {
+        padding: 18px;
+      }
+
+      .header {
+        background: linear-gradient(120deg, #0f766e, #0f766e 35%, #0d9488);
+        color: #ffffff;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 20px rgba(15, 118, 110, 0.22);
+      }
+
+      .brand {
+        display: table;
+        width: auto;
+      }
+
+      .brand-meta {
+        display: table-cell;
+        vertical-align: middle;
+        padding-left: 10px;
+      }
+
+      .logo {
+        width: 46px;
+        height: 34px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .header h2 {
+        margin: 0;
+        font-size: 24px;
+        letter-spacing: 0.2px;
+      }
+
+      .sub {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #d1fae5;
+      }
+
+      .report-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      }
+
+      .table-shell {
+        border: 1px solid #d7e0ea;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        border: 0;
+        border-right: 1px solid #d7e0ea;
+        border-bottom: 1px solid #d7e0ea;
+        padding: 9px 10px;
+        text-align: left;
+      }
+
+      th:last-child,
+      td:last-child {
+        border-right: 0;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      th {
+        background: #eef2ff;
+        color: #0f172a;
+        font-weight: 700;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #f8fafc;
+      }
+
+      .id-col {
+        width: 40px;
+        font-weight: 700;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .badge svg {
+        vertical-align: middle;
+        margin-right: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="header">
+        <div class="brand">
+          <span class="logo" aria-hidden="true">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style="vertical-align: middle; margin-top: 6px;"
+            >
+              <path
+                d="M12 2L4 5V11C4 16.05 7.41 20.74 12 22C16.59 20.74 20 16.05 20 11V5L12 2Z"
+                fill="#E6FFFA"
+              />
+              <path
+                d="M9.5 12.8L11.2 14.5L15.5 10.2"
+                stroke="#0F766E"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <div class="brand-meta">
+            <h2>Users Report</h2>
+            <div class="sub">Generated at: {{generatedAt}}</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="report-card">
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th class="id-col">#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Verification</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#if users.length}}
+                {{#each users}}
+                  <tr>
+                    <td class="id-col">{{s_no}}</td>
+                    <td>{{name}}</td>
+                    <td>{{email}}</td>
+                    <td>{{mobile}}</td>
+                    <td class="center">
+                      <span
+                        class="badge"
+                        style="background: {{verifiedBg}}; color: {{verifiedColor}};"
+                      >
+                        {{{verifiedIcon}}}
+                        {{verifiedLabel}}
+                      </span>
+                    </td>
+                  </tr>
+                {{/each}}
+              {{else}}
+                <tr>
+                  <td colspan="5" class="center">No users found</td>
+                </tr>
+              {{/if}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
